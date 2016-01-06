@@ -10,13 +10,18 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+    'language' => 'ru-RU',
     'bootstrap' => ['log'],
-    'modules' => [],
-    'components' => [
+    'modules' => [
         'user' => [
+            'admins' => ['admin'],
+        ],
+    ],
+    'components' => [
+        /*'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
-        ],
+        ],*/
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
