@@ -34,6 +34,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'booleanFormat' => ['Нет','Да'],
+            'dateFormat' => 'php:d.m.Y',         //Тут можно формат вывода дат по умолчанию настроить
+            'datetimeFormat' => 'php:d.m.Y H:i:s',
+            'timeFormat' => 'short',         
+            'nullDisplay' => 'Не задано',
+            'defaultTimeZone' => 'Asia/Baku',
+        ],        
     ],
     'params' => $params,
 ];
