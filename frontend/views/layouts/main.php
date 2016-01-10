@@ -36,6 +36,10 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/main/default/index']],
+        ['label' => 'Работы', 'items' => [
+            ['label' => 'Вышивание', 'url' => ['/main/posts/index?category_id=1']],
+            ['label' => 'Вязание', 'url' => ['/main/posts/index?category_id=2']],
+        ]],
         ['label' => 'About', 'url' => ['/main/default/about']],
         ['label' => 'Contact', 'url' => ['/main/contact']],
     ];

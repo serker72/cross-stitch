@@ -131,4 +131,13 @@ return array (
       '@zxbodya/yii2/galleryManager' => $vendorDir . '/zxbodya/yii2-gallery-manager',
     ),
   ),
+  'metalguardian/yii2-fotorama-widget' => 
+  array (
+    'name' => 'metalguardian/yii2-fotorama-widget',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@metalguardian/fotorama' => $vendorDir . '/metalguardian/yii2-fotorama-widget/src',
+    ),
+  ),
 );
