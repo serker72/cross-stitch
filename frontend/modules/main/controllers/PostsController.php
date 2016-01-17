@@ -4,6 +4,7 @@ namespace app\modules\main\controllers;
 
 use Yii;
 use app\modules\main\models\KscdPosts;
+use app\modules\main\models\KscdComments;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\web\Controller;
@@ -67,12 +68,17 @@ class PostsController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $model_comment = new KscdComments();
+        
         $dataProvider = new ArrayDataProvider([
-            'allModels' => $model->kscdComments,
+            //'allModels' => $model->kscdComments,
+            'allModels' => $model->kscdCommentsTree,
         ]);
         
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'model_comment' => $model_comment,
             'dataProvider' => $dataProvider,
         ]);
     }

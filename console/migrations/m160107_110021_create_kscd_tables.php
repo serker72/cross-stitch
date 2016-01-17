@@ -83,6 +83,7 @@ class m160107_110021_create_kscd_tables extends Migration
         $this->createIndex('kscd_comments_parent', '{{%kscd_comments}}', 'parent', false);
         $this->createIndex('kscd_comments_post_id', '{{%kscd_comments}}', 'post_id', false);
         $this->addForeignKey('fk_post_id_kscd_comments', '{{%kscd_comments}}', 'post_id', '{{%kscd_posts}}', 'id', 'RESTRICT', 'CASCADE');
+        $this->addForeignKey('fk_created_user_kscd_comments', '{{%kscd_comments}}', 'created_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
 
         // kscd_tags - Теги
         $this->createTable('{{%kscd_tags}}', [

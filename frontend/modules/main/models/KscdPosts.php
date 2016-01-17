@@ -8,6 +8,7 @@ use yii\behaviors\BlameableBehavior;
 use yii\db\Expression; 
 use zxbodya\yii2\galleryManager\GalleryBehavior;
 use dektrium\user\models\User;
+use app\modules\main\models\KscdComments;
 
 /**
  * This is the model class for table "kscd_posts".
@@ -126,8 +127,39 @@ class KscdPosts extends \yii\db\ActiveRecord
      */
     public function getKscdComments()
     {
-        return $this->hasMany(KscdComments::className(), ['post_id' => 'id']);
+        return $this->hasMany(KscdComments::className(), ['post_id' => 'id'])->orderBy(['parent' => SORT_ASC, 'created_date' => SORT_ASC]);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getKscdCommentsTree($root = 0)
+    {
+        $data = $this->getKscdComments()->asArray()->all();
+        return $this->commentsTree($data, $root);
+    }
+    
+    /**
+     * @return treee array
+     */
+    private function commentsTree(&$data, $root = 0) 
+    {
+        $tree = array();
+        foreach ($data as $id => $node) {
+            /*echo '<pre>';
+            print_r($node);
+            echo '</pre>';*/
+            if ($node['parent'] == $root) {
+                unset($data[$id]);
+                $node['childs'] = $this->commentsTree($data, $node['id']);
+                $tree[] = $node;
+            }
+        }
+        /*echo '<p><pre>';
+        print_r($tree);
+        echo '</pre></p>';*/
+        return $tree;
+    }    
 
     /**
      * @return \yii\db\ActiveQuery
