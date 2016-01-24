@@ -69,7 +69,8 @@ class PostsController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $model_comment = new KscdComments();
+        
+        $model_comment = $this->newComment($model);
         
         $dataProvider = new ArrayDataProvider([
             //'allModels' => $model->kscdComments,
@@ -81,6 +82,27 @@ class PostsController extends Controller
             'model_comment' => $model_comment,
             'dataProvider' => $dataProvider,
         ]);
+    }
+    
+    /*
+     * Создание нового комментария
+     */
+    protected function newComment($post)
+    {
+        $comment = new KscdComments;
+        
+        if(isset($_POST['KscdComments']))
+        {
+            $comment->attributes = $_POST['KscdComments'];
+            
+            if($post->addComment($comment))
+            {
+                if($comment->approved == KscdComments::STATUS_PENDING)
+                    Yii::$app->session->setFlash('commentSubmitted', 'Thank you for your comment. Your comment will be posted once it is approved.');
+                $this->refresh();
+            }
+        }
+        return $comment;
     }
     
     /**

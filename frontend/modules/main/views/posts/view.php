@@ -8,6 +8,35 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\modules\main\models\KscdPosts */
 
+/*
+ * Вывод одного комментария
+ */
+function print_comment($param, $level = 0)
+{
+    //$output = '<div><ul class="comments">';
+    $output = '';
+    foreach ($param as $key => $value) {
+        //$output .= '<li id="comment-'.$value['id'].'" class="clearfix">';
+        $output .= '<article id="comment-'.$value['id'].'" class="clearfix" style="margin-left: '.($level*20).'px">';
+        $output .= Html::img("http://gravatar.com/avatar/?s=".($value['gravatar_id'] ? $value['gravatar_id'] : '230'), ['class' => 'avatar']);
+        $output .= '    <div class="post-comments">';
+        $output .= '        <p class="meta">'.Html::encode($value['created_date']).'<a href="#">'.Html::encode($value['author']).'</a> пишет : <i class="pull-right"><a id="comment-reply" data-id="'.$value['id'].'"><small>Ответить</small></a></i></p>';
+        //href="#comment-form" 
+        $output .= '        <p>'.$value['content'].'</p>';
+        $output .= '    </div>';
+        $output .= '</article>';
+        
+        if ($value['childs']) {
+            $output .= print_comment($value['childs'], $level+1);
+        }
+        //$output .= '</li>';
+    }
+    
+    //$output .= '</ul></div>';
+    
+    return $output;
+}
+
 $this->title = $model->title;
 //$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Kscd Posts'), 'url' => ['index']];
 //$this->params['breadcrumbs'][] = $this->title;
@@ -64,95 +93,77 @@ $this->title = $model->title;
             <div class="blog-comment">
                 <h3 class="text-success">Комментарии</h3>
                 <hr/>
-                <ul class="comments">
-                    <?php foreach ($dataProvider->allModels as $key => $value) { ?>
-                    <li id="comment-<?php echo $value['id']; ?>" class="clearfix">
-                        <?= Html::img("http://gravatar.com/avatar/?s=230", ['class' => 'avatar']) ?>
-                        <div class="post-comments">
-                            <p class="meta"><?= Html::encode($value['created_date']) ?> <a href="#"><?= Html::encode($value['author']) ?></a> пишет : <i class="pull-right"><a href="#"><small>Ответить</small></a></i></p>
-                            <p><!--?= Html::encode($value['content']) ?--></p>
-                            <p><?php echo $value['content']; ?></p>
-                        </div>
-                        <?php if ($value['childs']) { ?>
-                        <ul class="comments">
-                            <?php foreach ($value['childs'] as $key1 => $value1) { ?>
-                            <li id="comment-<?php echo $value1['id']; ?>" class="clearfix">
-                                <?= Html::img("http://gravatar.com/avatar/?s=230", ['class' => 'avatar']) ?>
-                                <div class="post-comments">
-                                    <p class="meta"><?= Html::encode($value1['created_date']) ?> <a href="#"><?= Html::encode($value1['author']) ?></a> пишет : <i class="pull-right"><a href="#"><small>Ответить</small></a></i></p>
-                                    <p><?php echo $value1['content']; ?></p>
-                                </div>
-                            </li>
-                            <?php } ?>
-                        </ul>
-                        <?php } ?>
-                    </li>
-                    <?php } ?>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="col-md-12">
-            <div id="comment-form" class="form">
-                <?php $form = ActiveForm::begin(); ?>
-
-                <?= $form->field($model_comment, 'post_id')->hiddenInput(['value' => $model->id])->label(false) ?>
-
-                <?= $form->field($model_comment, 'author')->textInput(['maxlength' => true]) ?>
-
-                <?= $form->field($model_comment, 'author_email')->textInput(['maxlength' => true]) ?>
-
-                <?= $form->field($model_comment, 'author_url')->textInput(['maxlength' => true]) ?>
-
-                <!--?= $form->field($model_comment, 'author_ip')->textInput(['value' => Yii::app()->request->getUserHostAddress()]) ?-->
-
-                <?= $form->field($model_comment, 'agent')->hiddenInput(['value' => ''])->label(false) ?>
-
-                <?= $form->field($model_comment, 'content')->textarea(['rows' => 6]) ?>
-
-                <!--?= $form->field($model_comment, 'karma')->textInput() ?-->
-
-                <!--?= $form->field($model_comment, 'approved')->textInput(['maxlength' => true]) ?-->
-
-                <?= $form->field($model_comment, 'parent')->hiddenInput(['value' => 0])->label(false) ?>
+                <?php echo print_comment($dataProvider->allModels, 0); ?>
                 
-                <div class="form-group">
-                    <?= Html::submitButton($model_comment->isNewRecord ? Yii::t('app', 'Add') : Yii::t('app', 'Update'), ['class' => $model_comment->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-                </div>
+                <div id="comment-form" class="form post-comments">
+                    <?php if(Yii::$app->session->hasFlash('commentSubmitted')): ?>
+                        <div class="flash-success">
+                            <?php echo Yii::$app->session->getFlash('commentSubmitted'); ?>
+                        </div>
+                    <?php else: ?>                
+                        <?php $form = ActiveForm::begin(); ?>
 
-                <?php ActiveForm::end(); ?>
+                        <?= $form->field($model_comment, 'post_id')->hiddenInput(['value' => $model->id])->label(false) ?>
+
+                        <?= $form->field($model_comment, 'author')->textInput(['maxlength' => true]) ?>
+
+                        <?= $form->field($model_comment, 'author_email')->textInput(['maxlength' => true]) ?>
+
+                        <?= $form->field($model_comment, 'author_url')->textInput(['maxlength' => true]) ?>
+
+                        <?= $form->field($model_comment, 'author_ip')->hiddenInput(['value' => Yii::$app->request->getUserIP()])->label(false) ?>
+
+                        <?= $form->field($model_comment, 'agent')->hiddenInput(['value' => Yii::$app->request->getUserAgent()])->label(false) ?>
+
+                        <?= $form->field($model_comment, 'content')->textarea(['rows' => 6]) ?>
+
+                        <?= $form->field($model_comment, 'karma')->hiddenInput(['value' => 0])->label(false) ?>
+
+                        <?= $form->field($model_comment, 'approved')->hiddenInput(['value' => '1'])->label(false) ?>
+
+                        <?= $form->field($model_comment, 'parent')->hiddenInput(['value' => 0])->label(false) ?>
+
+                        <div class="form-group">
+                            <?= Html::submitButton($model_comment->isNewRecord ? Yii::t('app', 'Add') : Yii::t('app', 'Update'), ['class' => $model_comment->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                        </div>
+
+                        <?php ActiveForm::end(); ?>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>
-
-
-    <!--p-->
-        <!--?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?-->
-        <!--?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?-->
-    <!--/p-->
-
-    <!--?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'category_id',
-            'title:ntext',
-            'content:ntext',
-            'tags:ntext',
-            'status',
-            'comment_status',
-            'comment_count',
-            'created_date',
-            'created_user',
-            'updated_date',
-            'updated_user',
-        ],
-    ]) ?-->
-
 </div>
+
+<?php
+$script = <<< JS
+    function setParentComment(id)
+    {
+        var parentField = jQuery('#kscdcomments-parent');
+        if (typeof(parentField) != 'undefined'){
+            parentField.val(id);
+        }
+    }
+        
+    function reply_comment(eventObject) {
+        var id = parseInt(eventObject.delegateTarget.dataset.id);
+        var comment = jQuery("article#comment-"+id);
+        var form = jQuery('#comment-form');
+        
+        form.detach();
+        form.css('margin-left', parseInt(comment.css('margin-left')) + 20);
+        comment.after(form);
+
+        setParentComment(id);
+
+        return false;
+    }
+JS;
+
+$script1 = <<< JS
+        jQuery("a#comment-reply").click(function (eventObject) { reply_comment(eventObject); });
+JS;
+
+$this->registerJs($script, yii\web\View::POS_END);
+$this->registerJs($script1, yii\web\View::POS_READY);
+?>

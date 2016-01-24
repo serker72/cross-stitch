@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\db\Expression; 
+use dektrium\user\models\Profile;
 
 /**
  * This is the model class for table "kscd_comments".
@@ -28,6 +29,10 @@ use yii\db\Expression;
  */
 class KscdComments extends \yii\db\ActiveRecord
 {
+    // Константы для статуса комментариев
+    const STATUS_PENDING = '1';
+    const STATUS_APPROVED = '2';
+    
     /**
      * @inheritdoc
      */
@@ -37,11 +42,13 @@ class KscdComments extends \yii\db\ActiveRecord
             'dt' => [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_date',
+                'updatedAtAttribute' => null,
                 'value' => new Expression('NOW()'),
             ],
             'us' => [
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'created_user',
+                'updatedByAttribute' => null,
             ],
         ];
     }     
@@ -99,5 +106,13 @@ class KscdComments extends \yii\db\ActiveRecord
     public function getPost()
     {
         return $this->hasOne(KscdPosts::className(), ['id' => 'post_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProfile()
+    {
+        return $this->hasOne(Profile::className(), ['user_id' => 'created_user']);
     }
 }

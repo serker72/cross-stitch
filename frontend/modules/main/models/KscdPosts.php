@@ -9,6 +9,7 @@ use yii\db\Expression;
 use zxbodya\yii2\galleryManager\GalleryBehavior;
 use dektrium\user\models\User;
 use app\modules\main\models\KscdComments;
+use dektrium\user\models\Profile;
 
 /**
  * This is the model class for table "kscd_posts".
@@ -127,7 +128,9 @@ class KscdPosts extends \yii\db\ActiveRecord
      */
     public function getKscdComments()
     {
-        return $this->hasMany(KscdComments::className(), ['post_id' => 'id'])->orderBy(['parent' => SORT_ASC, 'created_date' => SORT_ASC]);
+        return $this->hasMany(KscdComments::className(), ['post_id' => 'id'])
+                ->joinWith('profile')
+                ->orderBy(['parent' => SORT_ASC, 'created_date' => SORT_ASC]);
     }
 
     /**
@@ -136,6 +139,7 @@ class KscdPosts extends \yii\db\ActiveRecord
     public function getKscdCommentsTree($root = 0)
     {
         $data = $this->getKscdComments()->asArray()->all();
+        //echo var_dump($this->getKscdComments()->prepare(Yii::$app->db->queryBuilder)->createCommand()->getRawSql());
         return $this->commentsTree($data, $root);
     }
     
@@ -144,20 +148,20 @@ class KscdPosts extends \yii\db\ActiveRecord
      */
     private function commentsTree(&$data, $root = 0) 
     {
+        //echo '<div style="margin-top: 70px;"><pre>';
         $tree = array();
         foreach ($data as $id => $node) {
-            /*echo '<pre>';
-            print_r($node);
-            echo '</pre>';*/
+            //print_r($node);
             if ($node['parent'] == $root) {
                 unset($data[$id]);
                 $node['childs'] = $this->commentsTree($data, $node['id']);
                 $tree[] = $node;
+                //print_r($tree);
             }
         }
-        /*echo '<p><pre>';
-        print_r($tree);
-        echo '</pre></p>';*/
+        //echo 'Tree</br>';
+        //echo print_r($tree);
+        //echo '</pre></div>';
         return $tree;
     }    
 
@@ -211,5 +215,21 @@ class KscdPosts extends \yii\db\ActiveRecord
             'category_id' => $categoryId,
             'status' => $status,
         ]);
+    }    
+    
+    /*
+     * Добавление нового комментария
+     */
+    public function addComment($comment)
+    {
+        if(Yii::$app->params['commentNeedApproval'])
+            $comment->approved = KscdComments::STATUS_PENDING;
+        else
+            $comment->approved = KscdComments::STATUS_APPROVED;
+        
+        $comment->post_id = $this->id;
+        $flag = $comment->save();
+        
+        return $flag;
     }    
 }
