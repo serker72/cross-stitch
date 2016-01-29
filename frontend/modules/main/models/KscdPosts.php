@@ -139,8 +139,18 @@ class KscdPosts extends \yii\db\ActiveRecord
     public function getKscdCommentsTree($root = 0)
     {
         $data = $this->getKscdComments()->asArray()->all();
+        
+        echo '<div style="margin-top: 70px;"><pre>';
+        echo print_r($data);
+        echo '</pre></div>';
+        
         //echo var_dump($this->getKscdComments()->prepare(Yii::$app->db->queryBuilder)->createCommand()->getRawSql());
-        return $this->commentsTree($data, $root);
+        $tree = $this->commentsTree($data, $root);
+        echo '<div style="margin-top: 70px;"><pre>';
+        echo print_r($tree);
+        echo '</pre></div>';
+        
+        return $tree;
     }
     
     /**
