@@ -18,10 +18,11 @@
         "yiisoft/yii2": ">=2.0.6",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
-        "dektrium/yii2-user": "0.9.*@dev",
-        "dektrium/yii2-rbac": "dev-master",
         "zxbodya/yii2-gallery-manager": "*@dev",
-        "metalguardian/yii2-fotorama-widget": "*"
+        "metalguardian/yii2-fotorama-widget": "*",
+        "nodge/yii2-eauth": "~2.0",
+        "budyaga/yii2-users": "*",
+        "vova07/yii2-start-themes": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -44,13 +44,16 @@ AppAsset::register($this);
         ['label' => 'Contact', 'url' => ['/main/contact']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/user/registration/register']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/user/security/login']];
+        $menuItems[] = ['label' => 'Регистрация', 'url' => ['/signup']];
+        $menuItems[] = ['label' => 'Вход', 'url' => ['/login']];
     } else {
         $menuItems[] = [
-            'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-            'url' => ['/user/security/logout'],
-            'linkOptions' => ['data-method' => 'post']
+            'label' => Yii::$app->user->identity->username, 'items' => [
+                ['label' => 'Профиль', 'url' => ['/profile?id=' . Yii::$app->user->identity->id]],
+                //['label' => 'Соцсети', 'url' => ['/user/settings/networks?id=' . Yii::$app->user->identity->id]],
+                ['label' => '', 'options' => ['role' => 'presentation', 'class' => 'divider']],
+                ['label' => 'Выход', 'url' => ['/logout'], 'linkOptions' => ['data-method' => 'post']],
+            ],
         ];
     }
     echo Nav::widget([

@@ -57,16 +57,6 @@ return array (
       '@yii/authclient' => $vendorDir . '/yiisoft/yii2-authclient',
     ),
   ),
-  'dektrium/yii2-user' => 
-  array (
-    'name' => 'dektrium/yii2-user',
-    'version' => '0.9.5.0',
-    'alias' => 
-    array (
-      '@dektrium/user' => $vendorDir . '/dektrium/yii2-user',
-    ),
-    'bootstrap' => 'dektrium\\user\\Bootstrap',
-  ),
   'yiisoft/yii2-bootstrap' => 
   array (
     'name' => 'yiisoft/yii2-bootstrap',
@@ -85,34 +75,6 @@ return array (
       '@yii/debug' => $vendorDir . '/yiisoft/yii2-debug',
     ),
   ),
-  'kartik-v/yii2-krajee-base' => 
-  array (
-    'name' => 'kartik-v/yii2-krajee-base',
-    'version' => '1.8.1.0',
-    'alias' => 
-    array (
-      '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base',
-    ),
-  ),
-  'kartik-v/yii2-widget-select2' => 
-  array (
-    'name' => 'kartik-v/yii2-widget-select2',
-    'version' => '2.0.6.0',
-    'alias' => 
-    array (
-      '@kartik/select2' => $vendorDir . '/kartik-v/yii2-widget-select2',
-    ),
-  ),
-  'dektrium/yii2-rbac' => 
-  array (
-    'name' => 'dektrium/yii2-rbac',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@dektrium/rbac' => $vendorDir . '/dektrium/yii2-rbac',
-    ),
-    'bootstrap' => 'dektrium\\rbac\\Bootstrap',
-  ),
   'yiisoft/yii2-imagine' => 
   array (
     'name' => 'yiisoft/yii2-imagine',
@@ -120,6 +82,43 @@ return array (
     'alias' => 
     array (
       '@yii/imagine' => $vendorDir . '/yiisoft/yii2-imagine',
+    ),
+  ),
+  'metalguardian/yii2-fotorama-widget' => 
+  array (
+    'name' => 'metalguardian/yii2-fotorama-widget',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@metalguardian/fotorama' => $vendorDir . '/metalguardian/yii2-fotorama-widget/src',
+    ),
+  ),
+  'nodge/yii2-eauth' => 
+  array (
+    'name' => 'nodge/yii2-eauth',
+    'version' => '2.4.1.0',
+    'alias' => 
+    array (
+      '@nodge/eauth' => $vendorDir . '/nodge/yii2-eauth/src',
+    ),
+    'bootstrap' => 'nodge\\eauth\\Bootstrap',
+  ),
+  'budyaga/yii2-cropper' => 
+  array (
+    'name' => 'budyaga/yii2-cropper',
+    'version' => '2.0.4.0',
+    'alias' => 
+    array (
+      '@budyaga/cropper' => $vendorDir . '/budyaga/yii2-cropper',
+    ),
+  ),
+  'budyaga/yii2-users' => 
+  array (
+    'name' => 'budyaga/yii2-users',
+    'version' => '0.1.8.0',
+    'alias' => 
+    array (
+      '@budyaga/users' => $vendorDir . '/budyaga/yii2-users',
     ),
   ),
   'zxbodya/yii2-gallery-manager' => 
@@ -131,13 +130,14 @@ return array (
       '@zxbodya/yii2/galleryManager' => $vendorDir . '/zxbodya/yii2-gallery-manager',
     ),
   ),
-  'metalguardian/yii2-fotorama-widget' => 
+  'vova07/yii2-start-themes' => 
   array (
-    'name' => 'metalguardian/yii2-fotorama-widget',
-    'version' => '1.0.0.0',
+    'name' => 'vova07/yii2-start-themes',
+    'version' => '0.1.6.0',
     'alias' => 
     array (
-      '@metalguardian/fotorama' => $vendorDir . '/metalguardian/yii2-fotorama-widget/src',
+      '@vova07/themes' => $vendorDir . '/vova07/yii2-start-themes',
     ),
+    'bootstrap' => 'vova07\\themes\\Bootstrap',
   ),
 );

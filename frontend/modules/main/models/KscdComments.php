@@ -6,7 +6,6 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\db\Expression; 
-use dektrium\user\models\Profile;
 
 /**
  * This is the model class for table "kscd_comments".
@@ -32,6 +31,11 @@ class KscdComments extends \yii\db\ActiveRecord
     // Константы для статуса комментариев
     const STATUS_PENDING = '1';
     const STATUS_APPROVED = '2';
+    
+    /**
+     * @var string
+     */
+    public $verifyCode;
     
     /**
      * @inheritdoc
@@ -74,7 +78,9 @@ class KscdComments extends \yii\db\ActiveRecord
             [['author', 'agent'], 'string', 'max' => 255],
             [['author_email', 'author_ip'], 'string', 'max' => 100],
             [['author_url'], 'string', 'max' => 200],
-            [['approved'], 'string', 'max' => 20]
+            [['approved'], 'string', 'max' => 20],
+            //[['captcha'], 'required'],
+            //[['verifyCode'], 'captcha'],
         ];
     }
 

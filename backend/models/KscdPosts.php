@@ -7,7 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\db\Expression; 
 use zxbodya\yii2\galleryManager\GalleryBehavior;
-use dektrium\user\models\User;
+use budyaga\users\models\User;
 
 /**
  * This is the model class for table "kscd_posts".

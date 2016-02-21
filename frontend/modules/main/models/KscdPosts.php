@@ -7,9 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\db\Expression; 
 use zxbodya\yii2\galleryManager\GalleryBehavior;
-use dektrium\user\models\User;
 use app\modules\main\models\KscdComments;
-use dektrium\user\models\Profile;
 
 /**
  * This is the model class for table "kscd_posts".
@@ -140,15 +138,16 @@ class KscdPosts extends \yii\db\ActiveRecord
     {
         $data = $this->getKscdComments()->asArray()->all();
         
-        echo '<div style="margin-top: 70px;"><pre>';
+        /*echo '<div style="margin-top: 70px;"><pre>';
         echo print_r($data);
-        echo '</pre></div>';
+        echo '</pre></div>';*/
         
         //echo var_dump($this->getKscdComments()->prepare(Yii::$app->db->queryBuilder)->createCommand()->getRawSql());
         $tree = $this->commentsTree($data, $root);
-        echo '<div style="margin-top: 70px;"><pre>';
+        //$tree = $this->dbResultToForest($data, 'id', 'parent');
+        /*echo '<div style="margin-top: 70px;"><pre>';
         echo print_r($tree);
-        echo '</pre></div>';
+        echo '</pre></div>';*/
         
         return $tree;
     }
@@ -166,7 +165,6 @@ class KscdPosts extends \yii\db\ActiveRecord
                 unset($data[$id]);
                 $node['childs'] = $this->commentsTree($data, $node['id']);
                 $tree[] = $node;
-                //print_r($tree);
             }
         }
         //echo 'Tree</br>';
@@ -241,5 +239,5 @@ class KscdPosts extends \yii\db\ActiveRecord
         $flag = $comment->save();
         
         return $flag;
-    }    
+    }
 }

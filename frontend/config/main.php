@@ -14,19 +14,18 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'defaultRoute' => 'main/default/index',
     'modules' => [
-        //'user' => [
-            // following line will restrict access to admin controller from frontend application
-            //'as frontend' => 'dektrium\user\filters\FrontendFilter',
-        //],
         'main' => [
             'class' => 'app\modules\main\Module',
         ],        
     ],    
     'components' => [
-        /*'user' => [
-            'identityClass' => 'common\models\User',
+        'user' => [
+            //'identityClass' => 'common\models\User',
+            //'enableAutoLogin' => true,
+            'identityClass' => 'budyaga\users\models\User',
             'enableAutoLogin' => true,
-        ],*/
+            'loginUrl' => ['/login'],            
+        ],
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
@@ -35,6 +34,19 @@ return [
                 '' => 'main/default/index',
                 'about' => 'main/about',
                 'contact' => 'main/contact/index',
+                // budyaga/yii2-users rules
+                //--------------------------------------------------------------
+                '/signup' => '/user/user/signup',
+                '/login' => '/user/user/login',
+                '/logout' => '/user/user/logout',
+                '/requestPasswordReset' => '/user/user/request-password-reset',
+                '/resetPassword' => '/user/user/reset-password',
+                '/profile' => '/user/user/profile',
+                '/retryConfirmEmail' => '/user/user/retry-confirm-email',
+                '/confirmEmail' => '/user/user/confirm-email',
+                '/unbind/<id:[\w\-]+>' => '/user/auth/unbind',
+                '/oauth/<authclient:[\w\-]+>' => '/user/auth/index',
+                //--------------------------------------------------------------
                 '<_a:error>' => 'main/default/<_a>',
                 '<_a:(login|logout)>' => 'user/default/<_a>',
                 //'posts' => 'main/posts/index',
@@ -45,6 +57,9 @@ return [
                 '<_m:[\w\-]+>' => '<_m>/default/index',
                 '<_m:[\w\-]+>/<_c:[\w\-]+>' => '<_m>/<_c>/index',
             ],
+        ],        
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
         ],        
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -58,6 +73,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'main/default/error',
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'booleanFormat' => ['Нет','Да'],
+            'dateFormat' => 'php:d.m.Y',         //Тут можно формат вывода дат по умолчанию настроить
+            'datetimeFormat' => 'php:d.m.Y H:i:s',
+            'timeFormat' => 'short',         
+            'nullDisplay' => 'Не задано',
+            'defaultTimeZone' => 'Asia/Baku',
+        ],        
     ],
     'params' => $params,
 ];

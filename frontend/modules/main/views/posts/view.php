@@ -4,9 +4,29 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\widgets\ListView;
 use yii\widgets\ActiveForm;
+use yii\captcha\Captcha;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\main\models\KscdPosts */
+
+/*
+ * Вывод даты из MySQL на русском
+ */
+function print_mysqldate_russian($datestr = '')
+{
+    if ($datestr == '') return '';
+    
+    $a1 = explode(' ', $datestr);
+    $a2 = explode('-', $a1[0]);
+    
+    $month_str = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+    
+    if ($a2[2][0] == '0') $a2[2] = $a2[2][1];
+    
+    $output = $a2[2] . ' ' . $month_str[($a2[1]-1)] . ' ' . $a2[0] . ' ' . $a1[1];
+    
+    return $output;
+}
 
 /*
  * Вывод одного комментария
@@ -20,7 +40,12 @@ function print_comment($param, $level = 0)
         $output .= '<article id="comment-'.$value['id'].'" class="clearfix" style="margin-left: '.($level*20).'px">';
         $output .= Html::img("http://gravatar.com/avatar/?s=".($value['gravatar_id'] ? $value['gravatar_id'] : '230'), ['class' => 'avatar']);
         $output .= '    <div class="post-comments">';
-        $output .= '        <p class="meta">'.Html::encode($value['created_date']).'<a href="#">'.Html::encode($value['author']).'</a> пишет : <i class="pull-right"><a id="comment-reply" data-id="'.$value['id'].'"><small>Ответить</small></a></i></p>';
+        //$output .= '        <p class="meta">'.Html::encode($value['created_date']).'<a href="#">'.Html::encode($value['author']).'</a> пишет : <i class="pull-right"><a id="comment-reply" data-id="'.$value['id'].'"><small>Ответить</small></a></i></p>';
+        $output .= '<p class="meta">';
+        //$output .= Yii::$app->formatter->asDatetime($value['created_date'], Yii::$app->params['datetimeFormat']);
+        $output .= print_mysqldate_russian($value['created_date']).'&nbsp;&nbsp;<strong>'.Html::encode($value['author']).'</strong>&nbsp;пишет:';
+        $output .= '<i class="pull-right"><a id="comment-reply" href="#comment-form" data-id="'.$value['id'].'"><small>Ответить</small></a></i>';
+        $output .= '</p>';
         //href="#comment-form" 
         $output .= '        <p>'.$value['content'].'</p>';
         $output .= '    </div>';
@@ -36,6 +61,7 @@ function print_comment($param, $level = 0)
     
     return $output;
 }
+
 
 $this->title = $model->title;
 //$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Kscd Posts'), 'url' => ['index']];
@@ -95,19 +121,23 @@ $this->title = $model->title;
                 <hr/>
                 <?php echo print_comment($dataProvider->allModels, 0); ?>
                 
-                <div id="comment-form" class="form post-comments">
-                    <?php if(Yii::$app->session->hasFlash('commentSubmitted')): ?>
-                        <div class="flash-success">
-                            <?php echo Yii::$app->session->getFlash('commentSubmitted'); ?>
-                        </div>
-                    <?php else: ?>                
+                <?php if (Yii::$app->user->isGuest) { ?>
+                    <div class="alert alert-warning">
+                        Только зарегистрированные и авторизованные пользователи могут оставлять комментарии.
+                    </div>
+                <?php } else { ?>                
+                    <div id="comment-add-div" class="comment-add">
+                        <p><a id="comment-add" href="#comment-form">Оставить комментарий</a></p>
+                    </div>
+                
+                    <div id="comment-form" class="form post-comments">
                         <?php $form = ActiveForm::begin(); ?>
 
                         <?= $form->field($model_comment, 'post_id')->hiddenInput(['value' => $model->id])->label(false) ?>
 
-                        <?= $form->field($model_comment, 'author')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model_comment, 'author')->textInput(['maxlength' => true, 'value' => Yii::$app->user->identity->username]) ?>
 
-                        <?= $form->field($model_comment, 'author_email')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model_comment, 'author_email')->textInput(['maxlength' => true, 'value' => Yii::$app->user->identity->email]) ?>
 
                         <?= $form->field($model_comment, 'author_url')->textInput(['maxlength' => true]) ?>
 
@@ -115,21 +145,26 @@ $this->title = $model->title;
 
                         <?= $form->field($model_comment, 'agent')->hiddenInput(['value' => Yii::$app->request->getUserAgent()])->label(false) ?>
 
-                        <?= $form->field($model_comment, 'content')->textarea(['rows' => 6]) ?>
+                        <?= $form->field($model_comment, 'content')->textarea(['rows' => 4]) ?>
 
                         <?= $form->field($model_comment, 'karma')->hiddenInput(['value' => 0])->label(false) ?>
 
                         <?= $form->field($model_comment, 'approved')->hiddenInput(['value' => '1'])->label(false) ?>
 
                         <?= $form->field($model_comment, 'parent')->hiddenInput(['value' => 0])->label(false) ?>
+                        
+                        <!--?= $form->field($model_comment, 'verifyCode')->widget(Captcha::classname(), [
+                            'captchaAction' => '/main/posts/captcha',
+                            'template' => '{image}{input}',
+                        ]) ?-->
 
                         <div class="form-group">
                             <?= Html::submitButton($model_comment->isNewRecord ? Yii::t('app', 'Add') : Yii::t('app', 'Update'), ['class' => $model_comment->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
                         </div>
 
                         <?php ActiveForm::end(); ?>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -158,10 +193,24 @@ $script = <<< JS
 
         return false;
     }
+        
+    function add_comment(eventObject) {
+        var comment = jQuery('#comment-add-div');
+        var form = jQuery('#comment-form');
+        
+        form.detach();
+        form.css('margin-left', parseInt(comment.css('margin-left')) + 20);
+        comment.after(form);
+
+        setParentComment(0);
+
+        return false;
+    }
 JS;
 
 $script1 = <<< JS
         jQuery("a#comment-reply").click(function (eventObject) { reply_comment(eventObject); });
+        jQuery("a#comment-add").click(function (eventObject) { add_comment(eventObject); });
 JS;
 
 $this->registerJs($script, yii\web\View::POS_END);
