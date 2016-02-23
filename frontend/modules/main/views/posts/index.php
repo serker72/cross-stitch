@@ -15,77 +15,91 @@ if ($category_name) {
     //$this->params['breadcrumbs'][] = 'Работы';
 }
 
+$img_items = [];
+$img_items_str = '';
+foreach ($dataProvider->models as $model) {
+    foreach($model->getBehavior('galleryBehavior')->getImages() as $image) {
+        $img_items[] = [
+            'img' => $image->getUrl('medium'),
+            'caption' => '<h3>'.$model->title.'</h3>',
+        ];
+        $img_items_str .= '<div data-img="' . $image->getUrl('medium') . '" data-caption="' . $model->title . '"><a href="' . Yii::getAlias('@web') . '/main/posts/view?id=' . $model->id . '"></a></div>';
+        //echo Html::img($image->getUrl('medium'));
+        break;
+    }
+}
+
 ?>
-<div class="kscd-posts-index">
+<div class="kscd-posts-index" <?php if (count($img_items) === 0) { echo 'style="background-color: transparent;"'; }?>>
+    <!-- Full Page Image Background Carousel Header -->
+    <header id="myCarousel" class="carousel slide">
+        <?php
+            //$fotorama = \metalguardian\fotorama\Fotorama::begin(
+            echo \metalguardian\fotorama\Fotorama::widget(
+                [
+                    'items' => $img_items,
+                    'options' => [
+                        //'nav' => 'thumbs',
+                        //'loop' => true,
+                        //'hash' => true,
+                        //'ratio' => 3/2,
+                        'width' => '100%',
+                        'height' => '90%',
+                        //'fit' => 'cover', // String. How to fit an image into a fotorama: 'contain' (Default), 'cover', 'scaledown', 'none'
+                        //'navposition' => 'top',
+                        //'keyboard' => true,
+                        'click' => false,
+                        //'captions' => true,
+                        //'shadows' => true, // Boolean. Enables shadows.
+                        //'margin' => 10, // Number. Horizontal margins for frames in pixels.
+                    ],
+                    /*'spinner' => [
+                        'lines' => 20,
+                    ],*/
+                ]
+            );
 
-    <h1><?= Html::encode($this->title) ?></h1>
+            //echo $img_items_str;
+            //$fotorama->end();
+        ?>
+    </header>
+    <!-- header -->
 
-    <!--p-->
-        <!--?= Html::a(Yii::t('app', 'Create Kscd Posts'), ['create'], ['class' => 'btn btn-success']) ?-->
-    <!--/p-->
+    <div class="container">
+        <?php if (count($img_items) === 0) { ?>
+            <h1>Работы в категории "<?= Html::encode($category_name) ?>" отсутствуют</h1>
+        <?php } ?>
+        <!--h1--><!--?= Html::encode($this->title) ?--><!--/h1-->
 
-    <!--?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        <!--p-->
+            <!--?= Html::a(Yii::t('app', 'Create Kscd Posts'), ['create'], ['class' => 'btn btn-success']) ?-->
+        <!--/p-->
 
-            'id',
-            'category_id',
-            'title:ntext',
-            'content:ntext',
-            'tags:ntext',
-            // 'status',
-            // 'comment_status',
-            // 'comment_count',
-            // 'created_date',
-            // 'created_user',
-            // 'updated_date',
-            // 'updated_user',
+        <!--?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?-->
-    
-    <!--?= ListView::widget([
-        'dataProvider' => $dataProvider,
-    ]); ?-->
-    
-    <?php
-        $img_items = [];
-        $img_items_str = '';
-        foreach ($dataProvider->models as $model) {
-            foreach($model->getBehavior('galleryBehavior')->getImages() as $image) {
-                $img_items[] = ['img' => $image->getUrl('medium')];
-                $img_items_str .= '<div data-img="' . $image->getUrl('medium') . '"><a href="' . Yii::getAlias('@web') . '/main/posts/view?id=' . $model->id . '"></a></div>';
-                //echo Html::img($image->getUrl('medium'));
-                break;
-            }
-        }
-        
-        //echo \metalguardian\fotorama\Fotorama::widget(
-        $fotorama = \metalguardian\fotorama\Fotorama::begin(
-            [
-                //'items' => $img_items,
-                'options' => [
-                    //'nav' => 'thumbs',
-                    //'loop' => true,
-                    //'hash' => true,
-                    //'ratio' => 3/2,
-                    'width' => '100%',
-                    'height' => '85%',
-                    //'fit' => 'contain',
-                    //'navposition' => 'top',
-                    //'keyboard' => true,
-                    'click' => false,
-                ],
-                'spinner' => [
-                    'lines' => 20,
-                ],
-            ]
-        );         
-        
-        echo $img_items_str;
-        $fotorama->end();
-    ?>
+                'id',
+                'category_id',
+                'title:ntext',
+                'content:ntext',
+                'tags:ntext',
+                // 'status',
+                // 'comment_status',
+                // 'comment_count',
+                // 'created_date',
+                // 'created_user',
+                // 'updated_date',
+                // 'updated_user',
 
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]); ?-->
+
+        <!--?= ListView::widget([
+            'dataProvider' => $dataProvider,
+        ]); ?-->
+    </div>
+    <!-- container -->
 </div>

@@ -127,7 +127,7 @@ class KscdPosts extends \yii\db\ActiveRecord
     public function getKscdComments()
     {
         return $this->hasMany(KscdComments::className(), ['post_id' => 'id'])
-                ->joinWith('profile')
+                ->joinWith('user')
                 ->orderBy(['parent' => SORT_ASC, 'created_date' => SORT_ASC]);
     }
 
@@ -199,6 +199,7 @@ class KscdPosts extends \yii\db\ActiveRecord
     
     /**
      * @param ActiveQuery $categoryId
+     * @return \yii\db\ActiveQuery
      */
     public static function getPostsByCategory($categoryId)
     {
@@ -207,6 +208,7 @@ class KscdPosts extends \yii\db\ActiveRecord
     
     /**
      * @param ActiveQuery $status
+     * @return \yii\db\ActiveQuery
      */
     public static function getPostsByStatus($status)
     {
@@ -216,6 +218,7 @@ class KscdPosts extends \yii\db\ActiveRecord
     /**
      * @param ActiveQuery $categoryId
      * @param ActiveQuery $status
+     * @return \yii\db\ActiveQuery
      */
     public static function getPostsByCategoryAndStatus($categoryId, $status)
     {
@@ -224,6 +227,23 @@ class KscdPosts extends \yii\db\ActiveRecord
             'status' => $status,
         ]);
     }    
+    
+    /**
+     * @param ActiveQuery $categoryId
+     * @param ActiveQuery $status
+     * @param ActiveQuery $postId
+     * @return \yii\db\ActiveQuery
+     */
+    public static function getOtherPostsByCategoryAndStatus($categoryId, $status, $postId)
+    {
+        return parent::find()
+            ->where([
+                'category_id' => $categoryId,
+                'status' => $status,
+            ])
+            ->andWhere(['!=', 'id', $postId])
+            ->all();
+    }
     
     /*
      * Добавление нового комментария

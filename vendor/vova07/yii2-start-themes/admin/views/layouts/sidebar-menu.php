@@ -52,26 +52,27 @@ echo Menu::widget(
             ],
             [
                 'label' => Yii::t('vova07/themes/admin', 'Access control'),
-                'url' => '#',
+                'url' => ['/user/rbac'],
+                //'url' => '#',
                 'icon' => 'fa-gavel',
                 'visible' => Yii::$app->user->can('rbacManage') || Yii::$app->user->can('BViewRoles') || Yii::$app->user->can('BViewPermissions') || Yii::$app->user->can('BViewRules'),
-                'items' => [
+                //'items' => [
                     /*[
                         'label' => Yii::t('vova07/themes/admin', 'Permissions'),
                         'url' => ['/rbac/permissions/index'],
                         'visible' => Yii::$app->user->can('rbacManage') || Yii::$app->user->can('BViewPermissions')
                     ],*/
-                    [
+                    /*[
                         'label' => Yii::t('vova07/themes/admin', 'Roles'),
                         'url' => ['/user/rbac'],
                         'visible' => Yii::$app->user->can('rbacManage') || Yii::$app->user->can('BViewRoles')
-                    ],
+                    ],*/
                     /*[
                         'label' => Yii::t('vova07/themes/admin', 'Rules'),
                         'url' => ['/rbac/rules/index'],
                         'visible' => Yii::$app->user->can('rbacManage') || Yii::$app->user->can('BViewRules')
                     ]*/
-                ]
+                //]
             ],
             [
                 'label' => 'Категории',

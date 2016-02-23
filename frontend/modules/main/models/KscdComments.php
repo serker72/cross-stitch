@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\db\Expression; 
+use budyaga\users\models\User;
 
 /**
  * This is the model class for table "kscd_comments".
@@ -117,8 +118,8 @@ class KscdComments extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProfile()
+    public function getUser()
     {
-        return $this->hasOne(Profile::className(), ['user_id' => 'created_user']);
+        return $this->hasOne(User::className(), ['id' => 'created_user']);
     }
 }

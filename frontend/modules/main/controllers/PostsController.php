@@ -85,6 +85,12 @@ class PostsController extends Controller
         
         $model_comment = $this->newComment($model);
         
+        $model_other_posts = KscdPosts::getOtherPostsByCategoryAndStatus($model->category_id, $model->status, $id);
+        
+        $category_name = Yii::$app->db->createCommand('SELECT name FROM kscd_categories WHERE id=:category_id', [':category_id' => $model->category_id])->queryScalar();
+        //$category_name = $model->category->name;
+        //$category_name = '';
+        
         $dataProvider = new ArrayDataProvider([
             //'allModels' => $model->kscdComments,
             'allModels' => $model->kscdCommentsTree,
@@ -93,7 +99,9 @@ class PostsController extends Controller
         return $this->render('view', [
             'model' => $model,
             'model_comment' => $model_comment,
+            'model_other_posts' => $model_other_posts,
             'dataProvider' => $dataProvider,
+            'category_name' => $category_name,
         ]);
     }
     

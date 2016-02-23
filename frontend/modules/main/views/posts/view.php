@@ -68,13 +68,19 @@ $this->title = $model->title;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="kscd-posts-view container-fluid">
+    <!-- Portfolio Item Heading -->
     <div class="row">
-        <div class="col-md-12">
-            <h1><?= Html::encode($this->title) ?></h1>
+        <div class="col-lg-12">
+            <h1 class="page-header"><?= Html::encode($this->title) ?>
+                <small>Item Subheading</small>
+            </h1>
         </div>
-        
-        <div class="col-md-12">
-            <div style="text-align: center;">
+    </div>
+    <!-- /.row -->    
+
+    <!-- Portfolio Item Row -->
+    <div class="row">
+        <div class="col-md-8">
             <?php
             //class="thumbnail" 
             $img_items_str = '';
@@ -84,16 +90,20 @@ $this->title = $model->title;
                 //break;
             } 
             
+            if ($img_items_str === '') {
+                $img_items_str = '<div data-img="http://placehold.it/750x500">&nbsp;</div>';
+            }
+            
             $fotorama = \metalguardian\fotorama\Fotorama::begin(
                 [
                     //'items' => $img_items,
                     'options' => [
-                        //'nav' => 'thumbs',
+                        'nav' => 'thumbs',
                         //'loop' => true,
                         //'hash' => true,
                         //'ratio' => 3/2,
-                        'width' => '100%',
-                        'height' => '100%',
+                        'width' => '750px',
+                        //'height' => '500px',
                         //'fit' => 'contain',
                         //'navposition' => 'top',
                         //'keyboard' => true,
@@ -108,13 +118,25 @@ $this->title = $model->title;
             echo $img_items_str;
             $fotorama->end();
             ?>
-            </div>
         </div>
-        
-        <div class="col-md-12">
+
+        <div class="col-md-4">
+            <h4>Описание работы</h4>
             <p><?php echo $model->content; ?></p>
+            <!--h3>Project Details</h3>
+            <ul>
+                <li>Lorem Ipsum</li>
+                <li>Dolor Sit Amet</li>
+                <li>Consectetur</li>
+                <li>Adipiscing Elit</li>
+            </ul-->
         </div>
-        
+
+    </div>
+    <!-- /.row -->    
+    
+    <!-- Portfolio Item Comments Row -->
+    <div class="row">
         <div class="col-md-12">
             <div class="blog-comment">
                 <h3 class="text-success">Комментарии</h3>
@@ -130,7 +152,7 @@ $this->title = $model->title;
                         <p><a id="comment-add" href="#comment-form">Оставить комментарий</a></p>
                     </div>
                 
-                    <div id="comment-form" class="form post-comments">
+                    <div id="comment-form" class="form post-comments" style="display: none;">
                         <?php $form = ActiveForm::begin(); ?>
 
                         <?= $form->field($model_comment, 'post_id')->hiddenInput(['value' => $model->id])->label(false) ?>
@@ -168,7 +190,44 @@ $this->title = $model->title;
             </div>
         </div>
     </div>
+    <!-- /.row -->
+    
+    <?php if (count($model_other_posts) > 0) { ?>
+    <!-- Related Projects Row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Другие работы в категории "<?= Html::encode($category_name) ?>"</h3>
+        </div>
+
+        <?php foreach ($model_other_posts as $model_post) { ?>
+        <div class="col-sm-3 col-xs-6">
+            <a href="<?php echo Yii::getAlias('@web') . '/main/posts/view?id=' . $model_post->id; ?>">
+            <?php 
+            $img_items_str = '';
+            foreach($model_post->getBehavior('galleryBehavior')->getImages() as $image) {
+                $img_items_str = $image->getUrl('medium');
+                break;
+            }
+            
+            if ($img_items_str === '') {
+                $img_items_str = "http://placehold.it/500x300";
+            }
+            
+            echo Html::img($img_items_str, [
+                'class' => 'img-responsive portfolio-item', 
+                'alt' => $model_post->title,
+                //'width' => '500px',
+                //'height' => '300px',
+            ]);
+            ?>
+            </a>
+        </div>
+        <?php } ?>
+    </div>
+    <!-- /.row -->    
+    <?php } ?>
 </div>
+<!-- /.kscd-posts-view /.container-fluid -->
 
 <?php
 $script = <<< JS
@@ -188,6 +247,7 @@ $script = <<< JS
         form.detach();
         form.css('margin-left', parseInt(comment.css('margin-left')) + 20);
         comment.after(form);
+        form.show();
 
         setParentComment(id);
 
@@ -201,6 +261,7 @@ $script = <<< JS
         form.detach();
         form.css('margin-left', parseInt(comment.css('margin-left')) + 20);
         comment.after(form);
+        form.show();
 
         setParentComment(0);
 

@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
@@ -28,18 +29,18 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => Html::img('@web/images/logo.png', ['alt'=>Yii::$app->name]),
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/main/default/index']],
-        ['label' => 'Работы', 'items' => [
-            ['label' => 'Вышивание', 'url' => ['/main/posts/index?category_id=1']],
-            ['label' => 'Вязание', 'url' => ['/main/posts/index?category_id=2']],
-        ]],
+        ['label' => 'Главная', 'url' => ['/main/default/index']],
+        ['label' => 'Вышивка', 'url' => ['/main/posts/index?category_id=1']],
+        ['label' => 'Вязание', 'url' => ['/main/posts/index?category_id=2']],
+        //['label' => 'Работы', 'items' => [
+        //]],
         ['label' => 'About', 'url' => ['/main/default/about']],
         ['label' => 'Contact', 'url' => ['/main/contact']],
     ];
@@ -63,6 +64,12 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
+    <?php
+    $pos = strpos(Url::to(), '/main/posts/index');
+    if (($pos !== false) || Url::home() || Url::home(true)) { ?>
+        <?= $content ?>
+    <?php } else { ?>
+    
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
@@ -70,6 +77,7 @@ AppAsset::register($this);
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
+    <?php } ?>
 </div>
 
 <footer class="footer">

@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
+    'name' => 'Olga Kerimova - Cross-Stitch',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'ru-RU',
@@ -31,7 +32,9 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '' => 'main/default/index',
+                //'' => 'main/default/index',
+                '' => 'main/posts/index',
+                'main' => 'main/posts/index',
                 'about' => 'main/about',
                 'contact' => 'main/contact/index',
                 // budyaga/yii2-users rules
@@ -82,6 +85,9 @@ return [
             'nullDisplay' => 'Не задано',
             'defaultTimeZone' => 'Asia/Baku',
         ],        
+        /*'view' => [
+            'theme' => 'vova07\themes\site\Theme'
+        ],*/
     ],
     'params' => $params,
 ];
