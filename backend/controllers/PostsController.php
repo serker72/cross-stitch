@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\KscdPosts;
+use backend\models\KskPosts;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 use zxbodya\yii2\galleryManager\GalleryManagerAction;
 
 /**
- * PostController implements the CRUD actions for KscdPosts model.
+ * PostController implements the CRUD actions for KskPosts model.
  */
 class PostsController extends Controller
 {
@@ -37,20 +37,20 @@ class PostsController extends Controller
                'class' => GalleryManagerAction::className(),
                // mappings between type names and model classes (should be the same as in behaviour)
                'types' => [
-                   'posts' => KscdPosts::className()
+                   'posts' => KskPosts::className()
                ]
            ],
         ];
     }
 
     /**
-     * Lists all KscdPosts models.
+     * Lists all KskPosts models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => KscdPosts::find(),
+            'query' => KskPosts::find(),
         ]);
 
         return $this->render('index', [
@@ -59,7 +59,7 @@ class PostsController extends Controller
     }
 
     /**
-     * Displays a single KscdPosts model.
+     * Displays a single KskPosts model.
      * @param string $id
      * @return mixed
      */
@@ -71,13 +71,13 @@ class PostsController extends Controller
     }
 
     /**
-     * Creates a new KscdPosts model.
+     * Creates a new KskPosts model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new KscdPosts();
+        $model = new KskPosts();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -89,7 +89,7 @@ class PostsController extends Controller
     }
 
     /**
-     * Updates an existing KscdPosts model.
+     * Updates an existing KskPosts model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -108,7 +108,7 @@ class PostsController extends Controller
     }
 
     /**
-     * Deletes an existing KscdPosts model.
+     * Deletes an existing KskPosts model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -121,15 +121,15 @@ class PostsController extends Controller
     }
 
     /**
-     * Finds the KscdPosts model based on its primary key value.
+     * Finds the KskPosts model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return KscdPosts the loaded model
+     * @return KskPosts the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = KscdPosts::findOne($id)) !== null) {
+        if (($model = KskPosts::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

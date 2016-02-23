@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 use yii\captcha\Captcha;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\main\models\KscdPosts */
+/* @var $model app\modules\main\models\KskPosts */
 
 /*
  * Вывод даты из MySQL на русском
@@ -64,10 +64,10 @@ function print_comment($param, $level = 0)
 
 
 $this->title = $model->title;
-//$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Kscd Posts'), 'url' => ['index']];
+//$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Ksk Posts'), 'url' => ['index']];
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="kscd-posts-view container-fluid">
+<div class="ksk-posts-view container-fluid">
     <!-- Portfolio Item Heading -->
     <div class="row">
         <div class="col-lg-12">
@@ -227,13 +227,13 @@ $this->title = $model->title;
     <!-- /.row -->    
     <?php } ?>
 </div>
-<!-- /.kscd-posts-view /.container-fluid -->
+<!-- /.ksk-posts-view /.container-fluid -->
 
 <?php
 $script = <<< JS
     function setParentComment(id)
     {
-        var parentField = jQuery('#kscdcomments-parent');
+        var parentField = jQuery('#kskcomments-parent');
         if (typeof(parentField) != 'undefined'){
             parentField.val(id);
         }

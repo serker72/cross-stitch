@@ -3,14 +3,14 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\KscdCategories;
+use backend\models\KskCategories;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CategoriesController implements the CRUD actions for KscdCategories model.
+ * CategoriesController implements the CRUD actions for KskCategories model.
  */
 class CategoriesController extends Controller
 {
@@ -27,13 +27,13 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Lists all KscdCategories models.
+     * Lists all KskCategories models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => KscdCategories::find(),
+            'query' => KskCategories::find(),
         ]);
 
         return $this->render('index', [
@@ -42,7 +42,7 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Displays a single KscdCategories model.
+     * Displays a single KskCategories model.
      * @param string $id
      * @return mixed
      */
@@ -54,13 +54,13 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Creates a new KscdCategories model.
+     * Creates a new KskCategories model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new KscdCategories();
+        $model = new KskCategories();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -72,7 +72,7 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Updates an existing KscdCategories model.
+     * Updates an existing KskCategories model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -91,7 +91,7 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Deletes an existing KscdCategories model.
+     * Deletes an existing KskCategories model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -104,15 +104,15 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Finds the KscdCategories model based on its primary key value.
+     * Finds the KskCategories model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return KscdCategories the loaded model
+     * @return KskCategories the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = KscdCategories::findOne($id)) !== null) {
+        if (($model = KskCategories::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

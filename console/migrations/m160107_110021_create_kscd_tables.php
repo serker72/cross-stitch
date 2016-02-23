@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160107_110021_create_kscd_tables extends Migration
+class m160107_110021_create_ksk_tables extends Migration
 {
     public function up()
     {
@@ -13,8 +13,8 @@ class m160107_110021_create_kscd_tables extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        // kscd_categories - Категории
-        $this->createTable('{{%kscd_categories}}', [
+        // ksk_categories - Категории
+        $this->createTable('{{%ksk_categories}}', [
             'id' => $this->bigPrimaryKey(),
             'name' => $this->string(200)->notNull()->defaultValue(''),
             'slug' => $this->string(200)->notNull()->defaultValue(''),
@@ -27,13 +27,13 @@ class m160107_110021_create_kscd_tables extends Migration
             'updated_user' => $this->integer()->notNull()->defaultValue(0),
         ], $tableOptions);
         
-        $this->createIndex('kscd_categories_unique_name', '{{%kscd_categories}}', 'name', true);
-        $this->createIndex('kscd_categories_unique_slug', '{{%kscd_categories}}', 'slug', true);
-        $this->addForeignKey('fk_created_user_kscd_categories', '{{%kscd_categories}}', 'created_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
-        $this->addForeignKey('fk_updated_user_kscd_categories', '{{%kscd_categories}}', 'updated_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
+        $this->createIndex('ksk_categories_unique_name', '{{%ksk_categories}}', 'name', true);
+        $this->createIndex('ksk_categories_unique_slug', '{{%ksk_categories}}', 'slug', true);
+        $this->addForeignKey('fk_created_user_ksk_categories', '{{%ksk_categories}}', 'created_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
+        $this->addForeignKey('fk_updated_user_ksk_categories', '{{%ksk_categories}}', 'updated_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
 
-        // kscd_posts - Записи
-        $this->createTable('{{%kscd_posts}}', [
+        // ksk_posts - Записи
+        $this->createTable('{{%ksk_posts}}', [
             'id' => $this->bigPrimaryKey(),
             'category_id' => $this->bigInteger()->notNull(),
             'title' => $this->string(65535)->notNull(),
@@ -50,15 +50,15 @@ class m160107_110021_create_kscd_tables extends Migration
             'updated_user' => $this->integer()->notNull()->defaultValue(0),
         ], $tableOptions);
         
-        $this->createIndex('kscd_posts_category_id', '{{%kscd_posts}}', 'category_id', false);
-        //$this->createIndex('kscd_posts_category_id_date_gmt', '{{%kscd_posts}}', ['category_id', 'created_date_gmt'], false);
-        $this->createIndex('kscd_posts_category_id_created_date', '{{%kscd_posts}}', ['category_id', 'created_date'], false);
-        $this->addForeignKey('fk_category_id_kscd_posts', '{{%kscd_posts}}', 'category_id', '{{%kscd_categories}}', 'id', 'RESTRICT', 'CASCADE');
-        $this->addForeignKey('fk_created_user_kscd_posts', '{{%kscd_posts}}', 'created_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
-        $this->addForeignKey('fk_updated_user_kscd_posts', '{{%kscd_posts}}', 'updated_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
+        $this->createIndex('ksk_posts_category_id', '{{%ksk_posts}}', 'category_id', false);
+        //$this->createIndex('ksk_posts_category_id_date_gmt', '{{%ksk_posts}}', ['category_id', 'created_date_gmt'], false);
+        $this->createIndex('ksk_posts_category_id_created_date', '{{%ksk_posts}}', ['category_id', 'created_date'], false);
+        $this->addForeignKey('fk_category_id_ksk_posts', '{{%ksk_posts}}', 'category_id', '{{%ksk_categories}}', 'id', 'RESTRICT', 'CASCADE');
+        $this->addForeignKey('fk_created_user_ksk_posts', '{{%ksk_posts}}', 'created_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
+        $this->addForeignKey('fk_updated_user_ksk_posts', '{{%ksk_posts}}', 'updated_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
 
-        // kscd_comments - Комментарии к записям
-        $this->createTable('{{%kscd_comments}}', [
+        // ksk_comments - Комментарии к записям
+        $this->createTable('{{%ksk_comments}}', [
             'id' => $this->bigPrimaryKey(),
             'post_id' => $this->bigInteger()->notNull(),
             'author' => $this->string()->notNull(),
@@ -75,41 +75,41 @@ class m160107_110021_create_kscd_tables extends Migration
             'created_user' => $this->integer()->notNull()->defaultValue(0),
         ], $tableOptions);
         
-        //$this->createIndex('kscd_comments_approved_date_gmt', '{{%kscd_comments}}', ['approved', 'created_date_gmt'], false);
-        $this->createIndex('kscd_comments_approved_created_date', '{{%kscd_comments}}', ['approved', 'created_date'], false);
-        $this->createIndex('kscd_comments_author_email', '{{%kscd_comments}}', 'author_email', false);
-        //$this->createIndex('kscd_comments_created_date_gmt', '{{%kscd_comments}}', 'created_date_gmt', false);
-        $this->createIndex('kscd_comments_created_date', '{{%kscd_comments}}', 'created_date', false);
-        $this->createIndex('kscd_comments_parent', '{{%kscd_comments}}', 'parent', false);
-        $this->createIndex('kscd_comments_post_id', '{{%kscd_comments}}', 'post_id', false);
-        $this->addForeignKey('fk_post_id_kscd_comments', '{{%kscd_comments}}', 'post_id', '{{%kscd_posts}}', 'id', 'RESTRICT', 'CASCADE');
-        $this->addForeignKey('fk_created_user_kscd_comments', '{{%kscd_comments}}', 'created_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
+        //$this->createIndex('ksk_comments_approved_date_gmt', '{{%ksk_comments}}', ['approved', 'created_date_gmt'], false);
+        $this->createIndex('ksk_comments_approved_created_date', '{{%ksk_comments}}', ['approved', 'created_date'], false);
+        $this->createIndex('ksk_comments_author_email', '{{%ksk_comments}}', 'author_email', false);
+        //$this->createIndex('ksk_comments_created_date_gmt', '{{%ksk_comments}}', 'created_date_gmt', false);
+        $this->createIndex('ksk_comments_created_date', '{{%ksk_comments}}', 'created_date', false);
+        $this->createIndex('ksk_comments_parent', '{{%ksk_comments}}', 'parent', false);
+        $this->createIndex('ksk_comments_post_id', '{{%ksk_comments}}', 'post_id', false);
+        $this->addForeignKey('fk_post_id_ksk_comments', '{{%ksk_comments}}', 'post_id', '{{%ksk_posts}}', 'id', 'RESTRICT', 'CASCADE');
+        $this->addForeignKey('fk_created_user_ksk_comments', '{{%ksk_comments}}', 'created_user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
 
-        // kscd_tags - Теги
-        $this->createTable('{{%kscd_tags}}', [
+        // ksk_tags - Теги
+        $this->createTable('{{%ksk_tags}}', [
             'id' => $this->bigPrimaryKey(),
             'name' => $this->string(80)->notNull(),
             'frequency' => $this->integer()->notNull()->defaultValue(0),
         ], $tableOptions);
         
-        $this->createIndex('kscd_tags_unique_name', '{{%kscd_tags}}', 'name', true);
+        $this->createIndex('ksk_tags_unique_name', '{{%ksk_tags}}', 'name', true);
         
     }
 
     public function down()
     {
-        //echo "m160107_110021_create_kscd_tables cannot be reverted.\n";
+        //echo "m160107_110021_create_ksk_tables cannot be reverted.\n";
         //return false;
         
         // Шаг 1 - удаляем таблицы с дочерними записями
-        $this->dropTable('{{%kscd_comments}}');
-        $this->dropTable('{{%kscd_posts}}');
+        $this->dropTable('{{%ksk_comments}}');
+        $this->dropTable('{{%ksk_posts}}');
         
         // Шаг 2 - удаляем таблицы с родительскими записями
-        $this->dropTable('{{%kscd_categories}}');
+        $this->dropTable('{{%ksk_categories}}');
         
         // Шаг 3 - удаляем несвязанные таблицы
-        $this->dropTable('{{%kscd_tags}}');
+        $this->dropTable('{{%ksk_tags}}');
     }
 
     /*

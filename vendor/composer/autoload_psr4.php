@@ -20,6 +20,7 @@ return array(
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'vova07\\themes\\' => array($vendorDir . '/vova07/yii2-start-themes'),
     'nodge\\eauth\\' => array($vendorDir . '/nodge/yii2-eauth/src'),
+    'mihaildev\\ckeditor\\' => array($vendorDir . '/mihaildev/yii2-ckeditor'),
     'metalguardian\\fotorama\\' => array($vendorDir . '/metalguardian/yii2-fotorama-widget/src'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'budyaga\\users\\' => array($vendorDir . '/budyaga/yii2-users'),

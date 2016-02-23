@@ -2,20 +2,21 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use backend\models\KscdCategories;
+use backend\models\KskCategories;
 use yii\helpers\ArrayHelper;
 use zxbodya\yii2\galleryManager\GalleryManager;
+use mihaildev\ckeditor\CKEditor;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\KscdPosts */
+/* @var $model backend\models\KskPosts */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="kscd-posts-form">
+<div class="ksk-posts-form">
 
     <?php $form = ActiveForm::begin(); ?>
     
-    <?php $listCategories = ArrayHelper::map(KscdCategories::find()->orderBy('name')->all(), 'id', 'name') ?>
+    <?php $listCategories = ArrayHelper::map(KskCategories::find()->orderBy('name')->all(), 'id', 'name') ?>
 
     <!--?= $form->field($model, 'category_id')->textInput(['maxlength' => true]) ?-->
     <?= $form->field($model, 'category_id')->dropDownList($listCategories, ['prompt'=>'Выберите категорию...']) ?>
@@ -23,7 +24,13 @@ use zxbodya\yii2\galleryManager\GalleryManager;
     <!--?= $form->field($model, 'title')->textarea(['rows' => 6]) ?-->
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'content')->textarea(['rows' => 8]) ?>
+    <!--?= $form->field($model, 'content')->textarea(['rows' => 8]) ?-->
+    <?= $form->field($model, 'content')->widget(CKEditor::className(),[
+        'editorOptions' => [
+            'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
+            'inline' => false, //по умолчанию false
+        ],
+    ]) ?>
 
     <!--?= $form->field($model, 'tags')->textarea(['rows' => 6]) ?-->
     <?= $form->field($model, 'tags')->textInput(['maxlength' => true]) ?>

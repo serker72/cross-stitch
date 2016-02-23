@@ -3,12 +3,13 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+
 /* @var $this yii\web\View */
-/* @var $model app\models\KscdCategories */
+/* @var $model app\models\KskCategories */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="kscd-categories-form">
+<div class="ksk-categories-form">
 
     <?php $form = ActiveForm::begin(); ?>
 

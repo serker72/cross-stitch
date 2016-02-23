@@ -3,8 +3,8 @@
 namespace app\modules\main\controllers;
 
 use Yii;
-use app\modules\main\models\KscdPosts;
-use app\modules\main\models\KscdComments;
+use app\modules\main\models\KskPosts;
+use app\modules\main\models\KskComments;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\web\Controller;
@@ -12,7 +12,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PostsController implements the CRUD actions for KscdPosts model.
+ * PostsController implements the CRUD actions for KskPosts model.
  */
 class PostsController extends Controller
 {
@@ -42,16 +42,16 @@ class PostsController extends Controller
     }
     
     /**
-     * Lists all KscdPosts models.
+     * Lists all KskPosts models.
      * @return mixed
      */
     public function actionIndex()
     {
         if(isset($_GET['category_id'])) {
-            $query = KscdPosts::getPostsByCategoryAndStatus($_GET['category_id'], 'publish');
-            $category_name = Yii::$app->db->createCommand('SELECT name FROM kscd_categories WHERE id=:category_id', [':category_id' => $_GET['category_id']])->queryScalar();
+            $query = KskPosts::getPostsByCategoryAndStatus($_GET['category_id'], 'publish');
+            $category_name = Yii::$app->db->createCommand('SELECT name FROM ksk_categories WHERE id=:category_id', [':category_id' => $_GET['category_id']])->queryScalar();
         } else {
-            $query = KscdPosts::getPostsByStatus('publish');
+            $query = KskPosts::getPostsByStatus('publish');
             $category_name = '';
         }
                 
@@ -75,7 +75,7 @@ class PostsController extends Controller
     }
 
     /**
-     * Displays a single KscdPosts model.
+     * Displays a single KskPosts model.
      * @param string $id
      * @return mixed
      */
@@ -85,15 +85,15 @@ class PostsController extends Controller
         
         $model_comment = $this->newComment($model);
         
-        $model_other_posts = KscdPosts::getOtherPostsByCategoryAndStatus($model->category_id, $model->status, $id);
+        $model_other_posts = KskPosts::getOtherPostsByCategoryAndStatus($model->category_id, $model->status, $id);
         
-        $category_name = Yii::$app->db->createCommand('SELECT name FROM kscd_categories WHERE id=:category_id', [':category_id' => $model->category_id])->queryScalar();
+        $category_name = Yii::$app->db->createCommand('SELECT name FROM ksk_categories WHERE id=:category_id', [':category_id' => $model->category_id])->queryScalar();
         //$category_name = $model->category->name;
         //$category_name = '';
         
         $dataProvider = new ArrayDataProvider([
-            //'allModels' => $model->kscdComments,
-            'allModels' => $model->kscdCommentsTree,
+            //'allModels' => $model->kskComments,
+            'allModels' => $model->kskCommentsTree,
         ]);
         
         return $this->render('view', [
@@ -110,15 +110,15 @@ class PostsController extends Controller
      */
     protected function newComment($post)
     {
-        $comment = new KscdComments;
+        $comment = new KskComments;
         
-        if(isset($_POST['KscdComments']))
+        if(isset($_POST['KskComments']))
         {
-            $comment->attributes = $_POST['KscdComments'];
+            $comment->attributes = $_POST['KskComments'];
             
             if($post->addComment($comment))
             {
-                if($comment->approved == KscdComments::STATUS_PENDING)
+                if($comment->approved == KskComments::STATUS_PENDING)
                     Yii::$app->session->setFlash('commentSubmitted', 'Thank you for your comment. Your comment will be posted once it is approved.');
                 $this->refresh();
             }
@@ -127,15 +127,15 @@ class PostsController extends Controller
     }
     
     /**
-     * Finds the KscdPosts model based on its primary key value.
+     * Finds the KskPosts model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return KscdPosts the loaded model
+     * @return KskPosts the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = KscdPosts::findOne($id)) !== null) {
+        if (($model = KskPosts::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

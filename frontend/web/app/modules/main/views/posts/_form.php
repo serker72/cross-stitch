@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\main\models\KscdPosts */
+/* @var $model app\modules\main\models\KskPosts */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="kscd-posts-form">
+<div class="ksk-posts-form">
 
     <?php $form = ActiveForm::begin(); ?>
 

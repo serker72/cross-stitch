@@ -22,7 +22,8 @@
         "metalguardian/yii2-fotorama-widget": "*",
         "nodge/yii2-eauth": "~2.0",
         "budyaga/yii2-users": "*",
-        "vova07/yii2-start-themes": "*"
+        "vova07/yii2-start-themes": "*",
+        "mihaildev/yii2-ckeditor": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

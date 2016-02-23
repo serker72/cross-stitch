@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\KscdCategories */
+/* @var $model app\models\KskCategories */
 
-$this->title = Yii::t('app', 'Create Kscd Categories');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Kscd Categories'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Create Ksk Categories');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Ksk Categories'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="kscd-categories-create">
+<div class="ksk-categories-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

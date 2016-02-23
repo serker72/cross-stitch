@@ -22,6 +22,7 @@ foreach ($dataProvider->models as $model) {
         $img_items[] = [
             'img' => $image->getUrl('medium'),
             'caption' => '<h3>'.$model->title.'</h3>',
+            'html' => '<a href="' . Yii::getAlias('@web') . '/main/posts/view?id=' . $model->id . '"></a',
         ];
         $img_items_str .= '<div data-img="' . $image->getUrl('medium') . '" data-caption="' . $model->title . '"><a href="' . Yii::getAlias('@web') . '/main/posts/view?id=' . $model->id . '"></a></div>';
         //echo Html::img($image->getUrl('medium'));
@@ -30,7 +31,7 @@ foreach ($dataProvider->models as $model) {
 }
 
 ?>
-<div class="kscd-posts-index" <?php if (count($img_items) === 0) { echo 'style="background-color: transparent;"'; }?>>
+<div class="ksk-posts-index" <?php if (count($img_items) === 0) { echo 'style="background-color: transparent;"'; }?>>
     <!-- Full Page Image Background Carousel Header -->
     <header id="myCarousel" class="carousel slide">
         <?php
@@ -72,7 +73,7 @@ foreach ($dataProvider->models as $model) {
         <!--h1--><!--?= Html::encode($this->title) ?--><!--/h1-->
 
         <!--p-->
-            <!--?= Html::a(Yii::t('app', 'Create Kscd Posts'), ['create'], ['class' => 'btn btn-success']) ?-->
+            <!--?= Html::a(Yii::t('app', 'Create Ksk Posts'), ['create'], ['class' => 'btn btn-success']) ?-->
         <!--/p-->
 
         <!--?= GridView::widget([

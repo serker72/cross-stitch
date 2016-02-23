@@ -3,14 +3,14 @@
 namespace app\modules\main\controllers;
 
 use Yii;
-use app\modules\main\models\KscdComments;
+use app\modules\main\models\KskComments;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CommentsController implements the CRUD actions for KscdComments model.
+ * CommentsController implements the CRUD actions for KskComments model.
  */
 class CommentsController extends Controller
 {
@@ -27,13 +27,13 @@ class CommentsController extends Controller
     }
 
     /**
-     * Lists all KscdComments models.
+     * Lists all KskComments models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => KscdComments::find(),
+            'query' => KskComments::find(),
         ]);
 
         return $this->render('index', [
@@ -42,7 +42,7 @@ class CommentsController extends Controller
     }
 
     /**
-     * Displays a single KscdComments model.
+     * Displays a single KskComments model.
      * @param string $id
      * @return mixed
      */
@@ -54,13 +54,13 @@ class CommentsController extends Controller
     }
 
     /**
-     * Creates a new KscdComments model.
+     * Creates a new KskComments model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new KscdComments();
+        $model = new KskComments();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -72,7 +72,7 @@ class CommentsController extends Controller
     }
 
     /**
-     * Updates an existing KscdComments model.
+     * Updates an existing KskComments model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -91,7 +91,7 @@ class CommentsController extends Controller
     }
 
     /**
-     * Deletes an existing KscdComments model.
+     * Deletes an existing KskComments model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -104,15 +104,15 @@ class CommentsController extends Controller
     }
 
     /**
-     * Finds the KscdComments model based on its primary key value.
+     * Finds the KskComments model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return KscdComments the loaded model
+     * @return KskComments the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = KscdComments::findOne($id)) !== null) {
+        if (($model = KskComments::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
